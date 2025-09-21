@@ -29,8 +29,8 @@ jobs:
         run: mvn clean install
 
       # 4. Run tests
-      - name: Run Tests
-        run: mvn test
+      #- name: Run Tests
+      #  run: mvn test
 
       # 5. Upload build artifacts (optional)
       - name: Upload JAR
