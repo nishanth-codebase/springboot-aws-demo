@@ -20,6 +20,8 @@ public class BoothService {
     public MilkBooth addBooth(Long villageId,MilkBooth milkBooth){
        Village village=villageRepository.findById(villageId)
                .orElseThrow(()->new RuntimeException("Village not found"));
+
+       village.addBooth(milkBooth);
        milkBooth.setVillage(village);
         return milkBoothRepository.save(milkBooth);
     }

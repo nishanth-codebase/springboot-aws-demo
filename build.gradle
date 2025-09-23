@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.6'
 	id 'io.spring.dependency-management' version '1.1.7'
+    id 'jacoco'
+    id 'org.sonarqube' version '4.3.1.3277'
 }
 
 group = 'com.pc.sss.milkprocurement'
@@ -34,3 +36,46 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+jacoco {
+    toolVersion = "0.8.10" // Latest stable version
+}
+jacocoTestReport {
+    dependsOn test // Tests must run before generating the report
+
+    reports {
+        xml.required = true
+        csv.required = false
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco/html')
+    }
+    //Exclude specific files or packages
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    '**/config/**',                         // Exclude config package
+                    '**/modal/**',                          // Exclude DTOs
+                    '**/repository/**',                     // Exclude repos classes
+                    '**/FarmerServiceApplication.class'     // Exclude main class
+            ])
+        }))
+    }
+}
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'CLASS'
+
+            excludes = [
+                    '**/config/**',                         // Exclude config package
+                    '**/modal/**',                          // Exclude DTOs
+                    '**/repository/**',                     // Exclude repos classes
+                    '**/FarmerServiceApplication.class'     // Exclude main class
+            ]
+
+            limit {
+                minimum = 0.85 // Minimum coverage threshold (85%)
+            }
+        }
+    }
+}
+

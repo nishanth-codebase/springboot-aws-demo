@@ -3,6 +3,7 @@ package com.pc.sss.milkprocurement.farmer_service.modal;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,7 +19,13 @@ public class Village {
     private String pincode;
 
     @OneToMany(mappedBy = "village",cascade = CascadeType.ALL)
-    private List<MilkBooth> milkBooths;
+    private List<MilkBooth> milkBooths=new ArrayList<>();
+
+    public void addBooth(MilkBooth booth) {
+        milkBooths.add(booth);
+        booth.setVillage(this); // Link booth back to village
+    }
+
 
     public Long getId() {
         return id;

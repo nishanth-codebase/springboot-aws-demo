@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,7 +23,12 @@ public class MilkBooth {
 
     @OneToMany(mappedBy = "milkBooth",cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Farmer> farmers;
+    private List<Farmer> farmers=new ArrayList<>();;
+
+    public void addFarmer(Farmer farmer) {
+        farmers.add(farmer);
+        farmer.setMilkBooth(this); // Link farmer back to booth
+    }
 
     public Long getId() {
         return id;
@@ -52,7 +58,7 @@ public class MilkBooth {
         return farmers;
     }
 
-    public void setFarmers(List<Farmer> farmers) {
-        this.farmers = farmers;
+    public void setFarmers(List<Farmer> farmers){
+        this.farmers=farmers;
     }
 }
